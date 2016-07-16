@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +19,34 @@ namespace WpfDaemonSample
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class App : Application
     {
-        public MainWindow()
+        /// <summary>
+        /// タスクトレイに表示するアイコン
+        /// </summary>
+        private NotifyIconWrapper notifyIcon;
+
+        /// <summary>
+        /// System.Windows.Application.Startup イベント を発生させます。
+        /// </summary>
+        /// <param name="e">イベントデータ を格納している StartupEventArgs</param>
+        protected override void OnStartup(StartupEventArgs e)
         {
-            InitializeComponent();
+            base.OnStartup(e);
+            this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            this.notifyIcon = new NotifyIconWrapper();
         }
+
+        /// <summary>
+        /// System.Windows.Application.Exit イベント を発生させます。
+        /// </summary>
+        /// <param name="e">イベントデータ を格納している ExitEventArgs</param>
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            this.notifyIcon.Dispose();
+        }
+
+
     }
 }
